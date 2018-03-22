@@ -6,7 +6,7 @@ Run a local Sentry instance, and then test it with a simple Spring Boot app.
 
 ### Postgres Volume
 
-Create the directory to pesist our Postgres databases:
+Create the directory to persist our Postgres databases:
 
 ```
 mkdir -p tmp/postgres-data
