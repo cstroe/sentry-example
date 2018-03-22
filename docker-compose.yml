@@ -1,0 +1,55 @@
+version: "2.1"
+
+services:
+  redis:
+    image: redis:3.2.11
+  postgres:
+    image: postgres:10.3
+    environment:
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - ./tmp/postgres-data:/var/lib/postgresql/data
+  sentry:
+    image: sentry:8.21.0
+    ports:
+      - 8080:9000
+    environment:
+      SENTRY_SECRET_KEY: "9g(+qd2_vp4ro-y8+2o+w==bvh^(@0w3v_-++7tjq1ylt+l)eb"
+      SENTRY_POSTGRES_HOST: postgres
+      SENTRY_PORTGRES_PORT: 5432
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: secret
+      SENTRY_REDIS_HOST: redis
+      SENTRY_REDIS_PORT: 6379
+  sentry-cron:
+    image: sentry:8.21.0
+    command: sentry run cron
+    environment:
+      SENTRY_SECRET_KEY: "9g(+qd2_vp4ro-y8+2o+w==bvh^(@0w3v_-++7tjq1ylt+l)eb"
+      SENTRY_POSTGRES_HOST: postgres
+      SENTRY_PORTGRES_PORT: 5432
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: secret
+      SENTRY_REDIS_HOST: redis
+      SENTRY_REDIS_PORT: 6379
+  sentry-worker-1:
+    image: sentry:8.21.0
+    command: sentry run worker
+    environment:
+      SENTRY_SECRET_KEY: "9g(+qd2_vp4ro-y8+2o+w==bvh^(@0w3v_-++7tjq1ylt+l)eb"
+      SENTRY_POSTGRES_HOST: postgres
+      SENTRY_PORTGRES_PORT: 5432
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: secret
+      SENTRY_REDIS_HOST: redis
+      SENTRY_REDIS_PORT: 6379
+  bootapp:
+    build: .
+    ports:
+      - 8081:8080
+    environment:
+      SENTRY_DNS: "http://db7a4f26bc2d482ebdbf639699644483:c8d2f40c5a7949298dade26110a5bf6e@sentry:9000/2"
