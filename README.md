@@ -12,7 +12,7 @@ Create the directory to persist our Postgres databases:
 mkdir -p tmp/postgres-data
 ```
 
-It's expesive to create the database, so it's easier to pesist it between runs.
+It's expensive to create the database, so it's easier to pesist it between runs.
 
 ### Error Producing App
 
